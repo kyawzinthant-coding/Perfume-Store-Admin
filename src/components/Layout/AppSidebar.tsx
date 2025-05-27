@@ -13,6 +13,7 @@ import { NavGroup } from './NavGroup';
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { user } = useAuthDataStore();
+
   return (
     <Sidebar collapsible="icon" variant="floating" {...props}>
       <SidebarHeader>
@@ -23,9 +24,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <NavGroup key={props.title} {...props} />
         ))}
       </SidebarContent>
-      {/* <SidebarFooter>
+      <SidebarFooter>
         <NavUser user={user!} />
-      </SidebarFooter> */}
+      </SidebarFooter>
       <SidebarRail />
     </Sidebar>
   );

@@ -14,6 +14,8 @@ export const authLoader: () => Promise<any> = async () => {
     });
 
     console.log('User loaded from loader:', user);
+    if (user.stauts == 'success') {
+    }
 
     useAuthDataStore.getState().setUser(user); // ✅ Store user in Zustand
     return user;
