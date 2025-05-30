@@ -6,6 +6,8 @@ import { authLoader, loginLoader } from './router/loader/auth-loader';
 
 const Dashboard = lazy(() => import('./features/dashboard'));
 const Login = lazy(() => import('./features/auth/Login'));
+const Categories = lazy(() => import('./features/category'));
+const Brands = lazy(() => import('./features/brands'));
 
 const withSuspense = (Component: React.ComponentType) => {
   return (
@@ -30,6 +32,14 @@ export const router = createBrowserRouter([
       {
         path: '/product',
         element: <h1>ProductPage</h1>,
+      },
+      {
+        path: '/category',
+        element: withSuspense(Categories),
+      },
+      {
+        path: '/brand',
+        element: withSuspense(Brands),
       },
     ],
   },

@@ -27,6 +27,14 @@ function RootLayout() {
     enabled: !userInStore?.email,
   });
 
+  const value = 5;
+
+  if (value <= 5) {
+    console.log(
+      'User data is not available yet, waiting for query to resolve...'
+    );
+  }
+
   useEffect(() => {
     useAuthDataStore.getState().setUser(user.data || null);
   }, [user]);

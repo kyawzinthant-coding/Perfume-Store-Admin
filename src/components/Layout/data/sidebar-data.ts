@@ -35,7 +35,12 @@ export const sidebarData: SidebarData = {
           icon: IconPackages,
         },
         {
-          title: 'History',
+          title: 'Brand',
+          url: '/brand',
+          icon: IconPackages,
+        },
+        {
+          title: 'Order History',
           url: '/history',
           icon: IconMessages,
         },
