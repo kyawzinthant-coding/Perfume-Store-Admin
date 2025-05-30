@@ -24,13 +24,7 @@ import {
 } from '@/components/ui/sidebar';
 import { Form, Link } from 'react-router';
 
-export function NavUser({
-  user,
-}: {
-  user: {
-    email: string;
-  };
-}) {
+export function NavUser({ user }: { user: { name: string; email: string } }) {
   const { isMobile } = useSidebar();
 
   console.log(user);
@@ -47,11 +41,12 @@ export function NavUser({
               <Avatar className="h-8 w-8 rounded-lg">
                 <AvatarImage alt={user.email} />
                 <AvatarFallback className="rounded-lg">
-                  {user.email.slice(0, 2)}
+                  {user.name}
                 </AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold">{user.email}</span>
+                <span className="truncate font-semibold">{user.name}</span>
+                <span className="truncate font-normal">{user.email}</span>
               </div>
               <ChevronsUpDown className="ml-auto size-4" />
             </SidebarMenuButton>

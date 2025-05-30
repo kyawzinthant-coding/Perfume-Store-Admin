@@ -4,8 +4,9 @@ import { immer } from 'zustand/middleware/immer';
 
 type User = {
   id: string;
-  username: string;
+  name: string;
   email: string;
+  role: 'admin' | 'user';
 };
 
 type AuthState = {

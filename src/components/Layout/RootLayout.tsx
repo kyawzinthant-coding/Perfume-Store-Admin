@@ -17,6 +17,8 @@ import { fetchMe } from '@/api/query';
 function RootLayout() {
   const userInStore = useAuthDataStore((state) => state.user);
 
+  console.log('userStore', userInStore);
+
   const { data: user } = useQuery({
     queryKey: ['me'],
     queryFn: fetchMe,
@@ -26,7 +28,7 @@ function RootLayout() {
   });
 
   useEffect(() => {
-    useAuthDataStore.getState().setUser(user || null);
+    useAuthDataStore.getState().setUser(user.data || null);
   }, [user]);
 
   const { pathname } = useLocation();

@@ -6,22 +6,26 @@ import { redirect } from 'react-router';
 
 export const authLoader: () => Promise<any> = async () => {
   try {
-    const user = await queryClient.ensureQueryData({
+    const res = await queryClient.ensureQueryData({
       queryKey: ['me'],
       queryFn: fetchMe,
-      staleTime: 1000 * 60 * 5, // Keep data fresh for 5 minutes
-      retry: 1, // Reduce retries to avoid infinite loops
+      staleTime: 1000 * 60 * 5, // 5 minutes
+      retry: 1,
     });
 
-    console.log('User loaded from loader:', user);
-    if (user.stauts == 'success') {
+    // res = { status: "success", data: { id, email, name, role } }
+
+    if (res?.status === 'success') {
+      useAuthDataStore.getState().setUser(res.data);
+      return res.data;
     }
 
-    useAuthDataStore.getState().setUser(user); // ✅ Store user in Zustand
-    return user;
+    // fallback in case something goes wrong
+    useAuthDataStore.getState().setUser(null);
+    return null;
   } catch {
     sessionStorage.removeItem('accessToken');
-    useAuthDataStore.getState().setUser(null); // Reset store on failure
+    useAuthDataStore.getState().setUser(null);
     return null;
   }
 };

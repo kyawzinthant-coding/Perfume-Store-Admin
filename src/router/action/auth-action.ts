@@ -21,7 +21,6 @@ export const loginAction = async ({ request }: ActionFunctionArgs) => {
       return { error: response.data || 'Login Failed!' };
     }
     await queryClient.invalidateQueries({ queryKey: ['me'] });
-    useAuthDataStore.getState().setUser(response.data);
     const redirectTo = new URL(request.url).searchParams.get('redirect') || '/';
 
     return redirect(redirectTo);
