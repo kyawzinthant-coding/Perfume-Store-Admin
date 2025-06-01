@@ -39,7 +39,6 @@ export const loginLoader = async () => {
     }
     return redirect('/');
   } catch (error) {
-    console.log(error);
     return null;
   }
 };

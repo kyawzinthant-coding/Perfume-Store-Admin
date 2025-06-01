@@ -17,8 +17,6 @@ import { fetchMe } from '@/api/query';
 function RootLayout() {
   const userInStore = useAuthDataStore((state) => state.user);
 
-  console.log('userStore', userInStore);
-
   const { data: user } = useQuery({
     queryKey: ['me'],
     queryFn: fetchMe,

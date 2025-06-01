@@ -27,8 +27,6 @@ import { Form, Link } from 'react-router';
 export function NavUser({ user }: { user: { name: string; email: string } }) {
   const { isMobile } = useSidebar();
 
-  console.log(user);
-
   return (
     <SidebarMenu>
       <SidebarMenuItem>

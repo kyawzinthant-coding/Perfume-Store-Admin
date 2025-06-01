@@ -33,3 +33,15 @@ export const CategoryProvider: React.FC<CategoryProviderProps> = ({
     </CategoryContext.Provider>
   );
 };
+
+export const useCategory = () => {
+  const CategoryContentProvider = React.useContext(CategoryContext);
+
+  if (!CategoryContentProvider) {
+    throw new Error(
+      'Category Provider has to be used within <CategoryContext>'
+    );
+  }
+
+  return CategoryContentProvider;
+};
