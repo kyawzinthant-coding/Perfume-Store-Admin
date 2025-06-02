@@ -1,5 +1,8 @@
+// src/features/category/context/category-context.tsx
+import React, { createContext } from 'react';
 import { CategoryType } from '../data/schema';
-import React, { createContext, useState } from 'react';
+import { useCrudDialog } from '@/hooks/use-crud-dialogs';
+
 type categoryDialogType = 'add' | 'edit' | 'delete';
 
 interface CategoryContextType {
@@ -14,17 +17,32 @@ const CategoryContext = createContext<CategoryContextType | null>(null);
 interface CategoryProviderProps {
   children: React.ReactNode;
 }
+
 export const CategoryProvider: React.FC<CategoryProviderProps> = ({
   children,
 }) => {
-  const [open, setOpen] = useState<categoryDialogType | null>(null);
-  const [currentRow, setCurrentRow] = useState<CategoryType | null>(null);
+  // Use the new custom hook
+  const { open, setOpen, currentRow, setCurrentRow } =
+    useCrudDialog<CategoryType>();
+
+  const setCurrentRowCompat: React.Dispatch<
+    React.SetStateAction<CategoryType | null>
+  > = (value) => {
+    if (typeof value === 'function') {
+      // @ts-ignore
+      setCurrentRow((prev) =>
+        (value as (prev: CategoryType | null) => CategoryType | null)(prev)
+      );
+    } else {
+      setCurrentRow(value);
+    }
+  };
 
   const value: CategoryContextType = {
     open,
     setOpen,
     currentRow,
-    setCurrentRow,
+    setCurrentRow: setCurrentRowCompat,
   };
 
   return (

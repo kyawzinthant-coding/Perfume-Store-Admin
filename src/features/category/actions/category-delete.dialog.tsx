@@ -10,7 +10,7 @@ import { useMutation } from '@tanstack/react-query';
 import { queryClient } from '@/lib/queryClient';
 import { ConfirmDialog } from '@/components/comfirm-dialog';
 import { CategoryType } from '../data/schema';
-import { deleteCategory } from '@/api/query';
+import { deleteCategory } from '@/api/category-query';
 
 interface Props {
   open: boolean;
@@ -30,11 +30,11 @@ export function CategoryDeleteDialog({
     mutationFn: deleteCategory,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['categories'] });
-      toast('Category deleted successfully');
+      toast.success('Category deleted successfully');
       onOpenChange(false);
     },
     onError: (error) => {
-      toast('Failed to delete Category');
+      toast.error('Failed to delete Category');
       console.error('Delete error:', error);
     },
   });
@@ -48,7 +48,6 @@ export function CategoryDeleteDialog({
       await deleteMutation.mutateAsync(categoryId);
     } catch (error) {
       console.error('Delete error:', error);
-      toast('Failed to delete series');
     } finally {
       setIsSubmitting(false);
     }

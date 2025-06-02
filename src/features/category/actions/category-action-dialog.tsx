@@ -25,10 +25,11 @@ import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
 import { queryClient } from '@/lib/queryClient';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { CategoryType } from '../data/schema';
-import { createCategory, updateCategory } from '@/api/query';
+
 import { ImageUpload } from '@/components/image-upload';
+import { createCategory, updateCategory } from '@/api/category-query';
 
 const formSchema = z.object({
   name: z.string().min(1, { message: 'name is required.' }),
@@ -50,7 +51,6 @@ export function CategoryActionDialog({
   open,
   onOpenChange,
 }: Props) {
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const isEdit = !!currentRow;
   const form = useForm<CategoryForm>({
     resolver: zodResolver(formSchema),
@@ -72,12 +72,12 @@ export function CategoryActionDialog({
     mutationFn: createCategory,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['categories'] });
-      toast('Category created successfully');
+      toast.success('Category created successfully');
       form.reset();
       onOpenChange(false);
     },
     onError: (error) => {
-      toast('Failed to create provider');
+      toast('Failed to create category');
       console.error('Create error:', error);
     },
   });
@@ -87,7 +87,7 @@ export function CategoryActionDialog({
       updateCategory(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['providers'] });
-      toast('Provider updated successfully');
+      toast.success('Category updated successfully');
       form.reset();
       onOpenChange(false);
     },
@@ -99,8 +99,6 @@ export function CategoryActionDialog({
 
   const onSubmit = async (values: CategoryForm) => {
     try {
-      setIsSubmitting(true);
-
       const categoryData = {
         name: values.name,
         category_image: values.category_image,
@@ -114,13 +112,10 @@ export function CategoryActionDialog({
         toast('Provider updated successfully');
       } else {
         await createMutation.mutateAsync(categoryData);
-        toast('Provider created successfully');
       }
     } catch (error) {
       console.error('Submission error:', error);
-      toast('An unexpected error occurred');
     } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -211,13 +206,11 @@ export function CategoryActionDialog({
             type="submit"
             form="category-form"
             className="cursor-pointer"
-            disabled={
-              isSubmitting ||
-              createMutation.isPending ||
-              updateMutation.isPending
-            }
+            disabled={createMutation.isPending || updateMutation.isPending}
           >
-            {isSubmitting ? 'Saving...' : 'Save changes'}
+            {createMutation.isPending || updateMutation.isPending
+              ? 'Saving...'
+              : 'Save changes'}
           </Button>
         </DialogFooter>
       </DialogContent>

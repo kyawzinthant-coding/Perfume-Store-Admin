@@ -14,8 +14,6 @@ import { NavGroup } from './NavGroup';
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { user } = useAuthDataStore();
 
-  console.log('user appslider', user);
-
   return (
     <Sidebar collapsible="icon" variant="floating" {...props}>
       <SidebarHeader>

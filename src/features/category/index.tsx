@@ -5,9 +5,10 @@ import { Main } from '@/components/Layout/main';
 import { DataTable } from './components/data-table';
 import { columns } from './components/columns';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { fetchCategoriesListQuery } from '@/api/query';
+
 import { CategoryDialogs } from './actions/category-dialog';
 import { AddCategory } from './actions/add-category-btn';
+import { fetchCategoriesListQuery } from '@/api/category-query';
 
 const Categories = () => {
   const { data } = useSuspenseQuery(fetchCategoriesListQuery());
