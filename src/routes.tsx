@@ -3,12 +3,17 @@ import { createBrowserRouter } from 'react-router';
 import RootLayout from './components/Layout/RootLayout';
 import { loginAction, logoutAction } from './router/action/auth-action';
 import { authLoader, loginLoader } from './router/loader/auth-loader';
-import { BrandLoader, CategoryLoader } from './router/loader/data-loader';
+import {
+  BrandLoader,
+  CategoryLoader,
+  ProductLoader,
+} from './router/loader/data-loader';
 
 const Dashboard = lazy(() => import('./features/dashboard'));
 const Login = lazy(() => import('./features/auth/Login'));
 const Categories = lazy(() => import('./features/category'));
 const Brands = lazy(() => import('./features/brands'));
+const Products = lazy(() => import('./features/products'));
 
 const withSuspense = (Component: React.ComponentType) => {
   return (
@@ -32,7 +37,8 @@ export const router = createBrowserRouter([
       },
       {
         path: '/product',
-        element: <h1>ProductPage</h1>,
+        element: withSuspense(Products),
+        loader: ProductLoader,
       },
       {
         path: '/category',

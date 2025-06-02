@@ -24,7 +24,7 @@ import {
 
 import React from 'react';
 import { DataTablePagination } from '@/components/data-table-pagination';
-import { DataTableToolbar } from './data-table-toolbar';
+import { DataTableToolbar } from '@/components/data-table-toolbar';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];

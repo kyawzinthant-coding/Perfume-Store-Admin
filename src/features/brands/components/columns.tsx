@@ -24,6 +24,7 @@ export const columns: ColumnDef<Brandtype>[] = [
         src={
           row.original.image_url ? row.original.image_url : '/public/vite.svg'
         }
+        loading="lazy"
         alt={row.original.name}
         className="rounded-lg border ring-1 object-cover w-15 h-15"
         width={50}
