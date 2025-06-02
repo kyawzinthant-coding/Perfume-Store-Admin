@@ -12,7 +12,7 @@ import { fetchCategoriesListQuery } from '@/api/category-query';
 
 const Categories = () => {
   const { data } = useSuspenseQuery(fetchCategoriesListQuery());
-  console.log(data.data);
+
   return (
     <CategoryProvider>
       <Header>

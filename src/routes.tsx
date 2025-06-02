@@ -3,7 +3,7 @@ import { createBrowserRouter } from 'react-router';
 import RootLayout from './components/Layout/RootLayout';
 import { loginAction, logoutAction } from './router/action/auth-action';
 import { authLoader, loginLoader } from './router/loader/auth-loader';
-import { CategoryLoader } from './router/loader/data-loader';
+import { BrandLoader, CategoryLoader } from './router/loader/data-loader';
 
 const Dashboard = lazy(() => import('./features/dashboard'));
 const Login = lazy(() => import('./features/auth/Login'));
@@ -42,6 +42,7 @@ export const router = createBrowserRouter([
       {
         path: '/brand',
         element: withSuspense(Brands),
+        loader: BrandLoader,
       },
     ],
   },

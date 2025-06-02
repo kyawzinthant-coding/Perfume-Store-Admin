@@ -4,10 +4,11 @@ import { cn } from '@/lib/utils';
 
 import LongText from '@/components/long-text';
 import { DataTableColumnHeader } from '@/components/data-table-column-header';
-import { CategoryType } from '../data/schema';
-import { DataTableRowActions } from './data-table-row-action';
 
-export const columns: ColumnDef<CategoryType>[] = [
+import { DataTableRowActions } from './data-table-row-action';
+import { Brandtype } from '../data/schema';
+
+export const columns: ColumnDef<Brandtype>[] = [
   {
     accessorKey: 'id',
     header: 'NO',

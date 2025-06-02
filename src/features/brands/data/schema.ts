@@ -10,3 +10,8 @@ export const BrandSchema = z.object({
   name: z.string(),
   image_url: z.string().url(),
 });
+
+export interface BrandCRUDType {
+  name: string;
+  image_url?: string | null;
+}

@@ -29,3 +29,13 @@ export const BrandProvider: React.FC<BrandProviderProps> = ({ children }) => {
     <BrandContext.Provider value={value}>{children}</BrandContext.Provider>
   );
 };
+
+export const useBrand = () => {
+  const BrandContentProvider = React.useContext(BrandContext);
+
+  if (!BrandContentProvider) {
+    throw new Error(' Brand Provider has to be used within <BrandContext>');
+  }
+
+  return BrandContentProvider;
+};
