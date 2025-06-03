@@ -6,7 +6,7 @@ import { Upload, X } from 'lucide-react';
 import { Input } from './ui/input';
 
 interface ImageUploadProps {
-  value: File | string | null;
+  value: File | string | null | undefined;
   onChange: (value: File | string | null) => void;
   className?: string;
 }

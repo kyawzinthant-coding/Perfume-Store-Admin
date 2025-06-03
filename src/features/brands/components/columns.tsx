@@ -1,7 +1,5 @@
 import { ColumnDef } from '@tanstack/react-table';
 
-import { cn } from '@/lib/utils';
-
 import LongText from '@/components/long-text';
 import { DataTableColumnHeader } from '@/components/data-table-column-header';
 
@@ -11,8 +9,12 @@ import { Brandtype } from '../data/schema';
 export const columns: ColumnDef<Brandtype>[] = [
   {
     accessorKey: 'id',
-    header: 'NO',
-    cell: ({ row }) => row.index + 1,
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Brand" />
+    ),
+    cell: ({ row }) => <div className="w-[5px] pl-4">{`${row.index + 1}`}</div>,
+    enableSorting: false,
+    enableHiding: false,
   },
   {
     accessorKey: 'image',
@@ -31,13 +33,6 @@ export const columns: ColumnDef<Brandtype>[] = [
         height={50}
       />
     ),
-    meta: {
-      className: cn(
-        'drop-shadow-[0_1px_2px_rgb(0_0_0_/_0.1)] dark:drop-shadow-[0_1px_2px_rgb(255_255_255_/_0.1)] lg:drop-shadow-none',
-        'bg-background transition-colors duration-200 group-hover/row:bg-muted group-data-[state=selected]/row:bg-muted',
-        'sticky left-6 md:table-cell'
-      ),
-    },
   },
   {
     accessorKey: 'name',
@@ -45,13 +40,6 @@ export const columns: ColumnDef<Brandtype>[] = [
     cell: ({ row }) => (
       <LongText className="max-w-36">{row.original.name}</LongText>
     ),
-    meta: {
-      className: cn(
-        'drop-shadow-[0_1px_2px_rgb(0_0_0_/_0.1)] dark:drop-shadow-[0_1px_2px_rgb(255_255_255_/_0.1)] lg:drop-shadow-none',
-        'bg-background transition-colors duration-200 group-hover/row:bg-muted group-data-[state=selected]/row:bg-muted',
-        'sticky left-6 md:table-cell'
-      ),
-    },
   },
 
   {

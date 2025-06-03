@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 import LongText from '@/components/long-text';
 import { DataTableColumnHeader } from '@/components/data-table-column-header';
 import { ProductType } from '../data/schema';
+import { DataTableRowActions } from './data-table-row-action';
 
 export const columns: ColumnDef<ProductType>[] = [
   {
@@ -99,6 +100,6 @@ export const columns: ColumnDef<ProductType>[] = [
   {
     accessorKey: 'action',
     header: 'Action',
-    // cell: ({ row }) => <DataTableRowActions row={row} />,
+    cell: ({ row }) => <DataTableRowActions row={row} />,
   },
 ];

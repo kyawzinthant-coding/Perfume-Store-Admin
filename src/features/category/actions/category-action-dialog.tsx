@@ -77,7 +77,7 @@ export function CategoryActionDialog({
       onOpenChange(false);
     },
     onError: (error) => {
-      toast('Failed to create category');
+      toast.error('Failed to create category');
       console.error('Create error:', error);
     },
   });

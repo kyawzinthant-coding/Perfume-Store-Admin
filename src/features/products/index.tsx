@@ -8,6 +8,8 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 
 import { ProductProvider } from './context/product-context';
 import { fetchProductsListQuery } from '@/api/product-query';
+import { AddProduct } from './actions/add-product-btn';
+import { ProductDialogs } from './actions/product-dialog';
 
 const Products = () => {
   const { data } = useSuspenseQuery(fetchProductsListQuery());
@@ -30,7 +32,7 @@ const Products = () => {
                 Here&apos;s a list of Products
               </p>
             </div>
-            {/* <AddCategory /> */}
+            <AddProduct />
           </div>
 
           <div>
@@ -40,6 +42,7 @@ const Products = () => {
       </Main>
 
       {/* <CategoryDialogs /> */}
+      <ProductDialogs />
     </ProductProvider>
   );
 };

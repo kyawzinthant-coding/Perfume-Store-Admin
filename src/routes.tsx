@@ -8,6 +8,7 @@ import {
   CategoryLoader,
   ProductLoader,
 } from './router/loader/data-loader';
+import NewProductCreate from './features/products/components/new-product-create-page';
 
 const Dashboard = lazy(() => import('./features/dashboard'));
 const Login = lazy(() => import('./features/auth/Login'));
@@ -37,8 +38,18 @@ export const router = createBrowserRouter([
       },
       {
         path: '/product',
-        element: withSuspense(Products),
-        loader: ProductLoader,
+        children: [
+          {
+            path: '',
+            index: true,
+            element: withSuspense(Products),
+            loader: ProductLoader,
+          },
+          {
+            path: 'create',
+            element: withSuspense(NewProductCreate),
+          },
+        ],
       },
       {
         path: '/category',

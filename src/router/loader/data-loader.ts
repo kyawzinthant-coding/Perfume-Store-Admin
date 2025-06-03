@@ -1,6 +1,9 @@
 import { fetchBrandsListQuery } from '@/api/brand-query';
 import { fetchCategoriesListQuery } from '@/api/category-query';
-import { fetchProductsListQuery } from '@/api/product-query';
+import {
+  fetchCategoryAndBrandQuery,
+  fetchProductsListQuery,
+} from '@/api/product-query';
 import { queryClient } from '@/lib/queryClient';
 
 export const CategoryLoader = async () => {
@@ -15,5 +18,10 @@ export const BrandLoader = async () => {
 
 export const ProductLoader = async () => {
   await queryClient.ensureQueryData(fetchProductsListQuery());
+  return null;
+};
+
+export const CategoryandBrandLoader = async () => {
+  await queryClient.ensureQueryData(fetchCategoryAndBrandQuery());
   return null;
 };
