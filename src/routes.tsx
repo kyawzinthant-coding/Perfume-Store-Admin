@@ -10,6 +10,8 @@ import {
   ProductLoader,
 } from './router/loader/data-loader';
 import NewProductCreate from './features/products/components/new-product-create-page';
+import { Error } from './components/error';
+import { Loading } from './components/loading';
 
 const Dashboard = lazy(() => import('./features/dashboard'));
 const Login = lazy(() => import('./features/auth/Login'));
@@ -19,7 +21,7 @@ const Products = lazy(() => import('./features/products'));
 
 const withSuspense = (Component: React.ComponentType) => {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<Loading />}>
       <Component />
     </Suspense>
   );
@@ -29,7 +31,7 @@ export const router = createBrowserRouter([
   {
     path: '/',
     element: <RootLayout />,
-    errorElement: <div>404</div>,
+    errorElement: <Error />,
     loader: authLoader,
     children: [
       {
@@ -49,7 +51,7 @@ export const router = createBrowserRouter([
           {
             path: 'create',
             element: withSuspense(NewProductCreate),
-            loader: CategoryandBrandLoader
+            loader: CategoryandBrandLoader,
           },
         ],
       },
