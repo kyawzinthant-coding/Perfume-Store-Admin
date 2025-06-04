@@ -20,7 +20,7 @@ interface DataTableRowActionsProps<TData> {
 export function DataTableRowActions<TData>({
   row,
 }: DataTableRowActionsProps<TData>) {
-  const provider = CategorySchema.parse(row.original);
+  const category = CategorySchema.parse(row.original);
 
   const { setOpen, setCurrentRow } = useCategory();
 
@@ -38,7 +38,7 @@ export function DataTableRowActions<TData>({
       <DropdownMenuContent align="end" className="w-[160px]">
         <DropdownMenuItem
           onClick={() => {
-            setCurrentRow(provider);
+            setCurrentRow(category);
             setOpen('edit');
           }}
         >
@@ -49,7 +49,7 @@ export function DataTableRowActions<TData>({
           className="cursor-pointer"
           variant="destructive"
           onClick={() => {
-            setCurrentRow(provider);
+            setCurrentRow(category);
             setOpen('delete');
           }}
         >

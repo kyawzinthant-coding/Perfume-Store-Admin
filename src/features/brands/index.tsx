@@ -22,7 +22,7 @@ const Brand = () => {
         </div>
       </Header>
       <Main>
-        <div className="mb-2 space-y-4 ">
+        <div className="mb-2  ">
           <div className="flex justify-between items-center space-x-4">
             <div className="space-y-2">
               <h1 className="text-2xl font-bold tracking-tight">Brand Lists</h1>
