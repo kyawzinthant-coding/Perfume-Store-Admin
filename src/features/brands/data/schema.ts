@@ -3,6 +3,7 @@ export interface Brandtype {
   id: string;
   name: string;
   image_url: string;
+  created_at: any;
 }
 
 export const BrandSchema = z.object({

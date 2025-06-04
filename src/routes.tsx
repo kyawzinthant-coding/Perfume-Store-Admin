@@ -5,6 +5,7 @@ import { loginAction, logoutAction } from './router/action/auth-action';
 import { authLoader, loginLoader } from './router/loader/auth-loader';
 import {
   BrandLoader,
+  CategoryandBrandLoader,
   CategoryLoader,
   ProductLoader,
 } from './router/loader/data-loader';
@@ -48,6 +49,7 @@ export const router = createBrowserRouter([
           {
             path: 'create',
             element: withSuspense(NewProductCreate),
+            loader: CategoryandBrandLoader
           },
         ],
       },

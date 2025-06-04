@@ -1,17 +1,18 @@
 import {
-  IconBrowserCheck,
-  IconChecklist,
-  IconHelp,
-  IconLayoutDashboard,
-  IconMessages,
-  IconNotification,
-  IconPackages,
-  IconPalette,
-  IconSettings,
-  IconTool,
-  IconUserCog,
-  IconUsers,
-} from '@tabler/icons-react';
+  LayoutDashboard,
+  Package,
+  Boxes,
+  Tag,
+  ShoppingCart,
+  Users,
+  Settings,
+  User,
+  CreditCard,
+  Palette,
+  Bell,
+  Monitor,
+  HelpCircle,
+} from 'lucide-react';
 import { SidebarData } from '../types';
 
 export const sidebarData: SidebarData = {
@@ -22,137 +23,77 @@ export const sidebarData: SidebarData = {
         {
           title: 'Dashboard',
           url: '/',
-          icon: IconLayoutDashboard,
+          icon: LayoutDashboard,
         },
         {
           title: 'Products',
           url: '/product',
-          icon: IconChecklist,
+          icon: Package,
         },
         {
           title: 'Category',
           url: '/category',
-          icon: IconPackages,
+          icon: Boxes,
         },
         {
           title: 'Brand',
           url: '/brand',
-          icon: IconPackages,
+          icon: Tag,
         },
         {
           title: 'Order History',
           url: '/history',
-          icon: IconMessages,
+          icon: ShoppingCart,
         },
         {
           title: 'Users',
           url: '/users',
-          icon: IconUsers,
+          icon: Users,
         },
       ],
     },
-    // {
-    //   title: 'Pages',
-    //   items: [
-    //     {
-    //       title: 'Auth',
-    //       icon: IconLockAccess,
-    //       items: [
-    //         {
-    //           title: 'Sign In',
-    //           url: '/sign-in',
-    //         },
-    //         {
-    //           title: 'Sign In (2 Col)',
-    //           url: '/sign-in-2',
-    //         },
-    //         {
-    //           title: 'Sign Up',
-    //           url: '/sign-up',
-    //         },
-    //         {
-    //           title: 'Forgot Password',
-    //           url: '/forgot-password',
-    //         },
-    //         {
-    //           title: 'OTP',
-    //           url: '/otp',
-    //         },
-    //       ],
-    //     },
-    //     {
-    //       title: 'Errors',
-    //       icon: IconBug,
-    //       items: [
-    //         {
-    //           title: 'Unauthorized',
-    //           url: '/401',
-    //           icon: IconLock,
-    //         },
-    //         {
-    //           title: 'Forbidden',
-    //           url: '/403',
-    //           icon: IconUserOff,
-    //         },
-    //         {
-    //           title: 'Not Found',
-    //           url: '/404',
-    //           icon: IconError404,
-    //         },
-    //         {
-    //           title: 'Internal Server Error',
-    //           url: '/500',
-    //           icon: IconServerOff,
-    //         },
-    //         {
-    //           title: 'Maintenance Error',
-    //           url: '/503',
-    //           icon: IconBarrierBlock,
-    //         },
-    //       ],
-    //     },
-    //   ],
-    // },
     {
       title: 'Other',
       items: [
         {
           title: 'Settings',
-          icon: IconSettings,
+          icon: Settings,
           items: [
             {
               title: 'Profile',
               url: '/settings',
-              icon: IconUserCog,
+              icon: User,
             },
             {
               title: 'Account',
               url: '/settings/account',
-              icon: IconTool,
+              icon: CreditCard,
             },
             {
               title: 'Appearance',
               url: '/settings/appearance',
-              icon: IconPalette,
+              icon: Palette,
             },
             {
               title: 'Notifications',
               url: '/settings/notifications',
-              icon: IconNotification,
+              icon: Bell,
             },
             {
               title: 'Display',
               url: '/settings/display',
-              icon: IconBrowserCheck,
+              icon: Monitor,
             },
           ],
         },
         {
           title: 'Help Center',
           url: '/help-center',
-          icon: IconHelp,
+          icon: HelpCircle,
         },
       ],
     },
   ],
 };
+
+export default sidebarData;

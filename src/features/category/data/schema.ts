@@ -3,6 +3,7 @@ export interface CategoryType {
   id: string;
   name: string;
   image_url?: string | null;
+  created_at: any;
 }
 
 export const CategorySchema = z.object({
