@@ -68,8 +68,8 @@ export function useProductForm({ product, onSuccess }: UseProductFormProps) {
   const updateMutation = useMutation({
     mutationFn: updateProduct,
     onSuccess: (updatedProductData) => {
-      toast('Product updated successfully!', {
-        description: `${updatedProductData.name} has been edited in your inventory.`,
+      toast.success('Product updated successfully!', {
+        description: `${updatedProductData.data.name} has been edited in your inventory.`,
       });
       queryClient.invalidateQueries({ queryKey: ['products'] });
       queryClient.invalidateQueries({ queryKey: ['product', product.id] });

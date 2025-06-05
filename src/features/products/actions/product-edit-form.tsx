@@ -7,7 +7,7 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router';
 import { ProductCreateType } from '../data/schema';
 import { BasicInformationSection } from '@/components/product-form/BasicINformationSection';
-import { useFormSubmission, useProductForm } from '@/hooks/useProductForm';
+import { useFormSubmission, useProductForm } from '@/hooks/use-product-form';
 import { ProductDetailsSection } from '@/components/product-form/ProductDetailsSection';
 import { FragranceNotesSection } from '@/components/product-form/FragranceNoteSection';
 import { ImageUploadComponent } from '@/components/product-form/ImageUploadComponent';

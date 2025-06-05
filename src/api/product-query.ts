@@ -26,10 +26,11 @@ export const updateProduct = async ({
   id: string;
   product: ProductCreateType;
 }) =>
-  (console.log(id, product),
-  await api.post(`products/${id}`, product, {
-    headers: { 'Content-Type': 'multipart/form-data' },
-  })).data;
+  (
+    await api.post(`products/${id}`, product, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    })
+  ).data;
 
 export const deleteProduct = async (id: string) =>
   (await api.delete(`products/${id}`)).data;
