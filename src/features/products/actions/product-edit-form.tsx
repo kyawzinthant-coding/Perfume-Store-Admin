@@ -6,13 +6,11 @@ import { fetchCategoryAndBrandQuery } from '@/api/product-query';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router';
 import { ProductCreateType } from '../data/schema';
-import {
-  BasicInformationSection,
-  FragranceNotesSection,
-  ImageUploadComponent,
-  ProductDetailsSection,
-} from '@/components/product-form/BasicINformationSection';
+import { BasicInformationSection } from '@/components/product-form/BasicINformationSection';
 import { useFormSubmission, useProductForm } from '@/hooks/useProductForm';
+import { ProductDetailsSection } from '@/components/product-form/ProductDetailsSection';
+import { FragranceNotesSection } from '@/components/product-form/FragranceNoteSection';
+import { ImageUploadComponent } from '@/components/product-form/ImageUploadComponent';
 
 interface ProductEditFormProps {
   product: ProductCreateType & { id: string; image_url?: string };
