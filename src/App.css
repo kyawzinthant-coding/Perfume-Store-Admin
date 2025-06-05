@@ -40,3 +40,8 @@
 .read-the-docs {
   color: #888;
 }
+
+
+[&:-webkit-autofill]:!bg-background 
+[&:-webkit-autofill]:!text-foreground 
+[&:-webkit-autofill]:shadow-[0_0_0_1000px_hsl(var(--background))_inset]

@@ -277,8 +277,8 @@ export function BrandActionDialog({ currentRow, open, onOpenChange }: Props) {
                       <div className="relative">
                         <Input
                           placeholder="Enter brand name (e.g., Nike, Apple)"
-                          className="pr-10"
-                          autoComplete="off"
+                          className="pr-10 [&:-webkit-autofill]:!bg-background [&:-webkit-autofill]:!text-foreground [&:-webkit-autofill]:shadow-[0_0_0_1000px_hsl(var(--background))_inset]"
+                          autoComplete="new-password"
                           disabled={isLoading}
                           {...field}
                         />
