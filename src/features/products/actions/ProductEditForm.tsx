@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
@@ -121,7 +121,7 @@ export default function ProductEditForm({ product }: ProductEditFormProps) {
     (Object.keys(currentFormValues) as Array<keyof ProductFormValues>).forEach(
       (key) => {
         const currentValue = currentFormValues[key];
-        const initialValue = initialComparableFormValues[key]; // From useState
+        const initialValue = initialComparableFormValues[key];
         let fieldIsDifferent = false;
 
         if (key === 'product_image') {

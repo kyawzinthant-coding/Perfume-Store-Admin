@@ -6,7 +6,7 @@ import { Main } from '@/components/Layout/main';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useLoaderData } from 'react-router';
 import { OneProductQuery } from '@/api/product-query';
-import ProductEditForm from '../actions/ProductEditForm';
+import ProductEditForm from '../actions/product-edit-form';
 
 const ProductEditPage = () => {
   const { productId } = useLoaderData();
@@ -22,6 +22,7 @@ const ProductEditPage = () => {
       </Header>
       <Main>
         <div className="mb-2 ">
+          {/* <ProductEditForm product={data.data} /> */}
           <ProductEditForm product={data.data} />
         </div>
       </Main>
