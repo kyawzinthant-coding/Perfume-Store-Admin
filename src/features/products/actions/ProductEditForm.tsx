@@ -1,3 +1,4 @@
+import React, { useCallback, useEffect, useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
@@ -22,10 +23,14 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
 import { ImageUpload } from '@/components/image-upload';
-import { ProductFormValues, productSchema } from '../data/schema';
-import { createProduct, fetchCategoryAndBrandQuery } from '@/api/product-query';
+import {
+  ProductCreateType,
+  ProductFormValues,
+  productSchema,
+} from '../data/schema'; // Adjust path as needed
+import { fetchCategoryAndBrandQuery, updateProduct } from '@/api/product-query'; // Adjust path as needed
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query';
-import { queryClient } from '@/lib/queryClient';
+import { queryClient } from '@/lib/queryClient'; // Adjust path as needed
 import { useNavigate } from 'react-router';
 
 const genderOptions = [
@@ -34,63 +39,205 @@ const genderOptions = [
   { value: 'feminine', label: 'Feminine' },
 ];
 
-export default function ProductCreateForm() {
-  const { data } = useSuspenseQuery(fetchCategoryAndBrandQuery());
+interface ProductEditFormProps {
+  product: ProductCreateType & { id: string; image_url?: string };
+}
+
+export default function ProductEditForm({ product }: ProductEditFormProps) {
+  const { data: categoryAndBrandData } = useSuspenseQuery(
+    fetchCategoryAndBrandQuery()
+  );
   const navigate = useNavigate();
+
+  // Helper to get gender affinity value from name (label)
+  const getGenderAffinityValue = useCallback((name?: string) => {
+    if (!name) return '';
+    const option = genderOptions.find(
+      (opt) => opt.label.toLowerCase() === name.toLowerCase()
+    );
+    return option ? option.value : '';
+  }, []);
+
+  // Function to calculate form values based on product data
+  const calculateFormValues = useCallback(
+    (p: typeof product): ProductFormValues => {
+      return {
+        name: p.name || '',
+        description: p.description || '',
+        brand_id: p.brand_id || '',
+        category_id: p.category_id || '',
+        size_ml: p.size_ml,
+        price: p.price ?? undefined,
+        stock_quantity: p.stock_quantity ?? undefined,
+        top_notes: p.top_notes || '',
+        middle_notes: p.middle_notes || '',
+        base_notes: p.base_notes || '',
+        gender_affinity: getGenderAffinityValue(p.gender_affinity),
+        product_image: p.image_url || '', // Initial value for product_image field is the URL
+      };
+    },
+    [getGenderAffinityValue]
+  );
+
   const form = useForm<ProductFormValues>({
     resolver: zodResolver(productSchema),
-    defaultValues: {
-      name: '',
-      description: '',
-      brand_id: '',
-      category_id: '',
-      size_ml: undefined,
-      price: undefined,
-      stock_quantity: undefined,
-      top_notes: '',
-      middle_notes: '',
-      base_notes: '',
-      gender_affinity: '',
-    },
+    defaultValues: calculateFormValues(product),
   });
 
-  const createMutation = useMutation({
-    mutationFn: createProduct,
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ['products'] });
-      form.reset();
-      toast('Product created successfully!', {
-        description: `${data.name} has been added to your inventory.`,
+  // Store the initial form values (derived from product prop) for comparison.
+  const [initialComparableFormValues, setInitialComparableFormValues] =
+    useState(() => calculateFormValues(product));
+
+  // Effect to update form's defaultValues and our comparison state if 'product' prop changes
+  useEffect(() => {
+    const newInitialValues = calculateFormValues(product);
+    form.reset(newInitialValues); // Reset react-hook-form state
+    setInitialComparableFormValues(newInitialValues); // Update our stored initial state
+  }, [product, calculateFormValues, form]);
+
+  const updateMutation = useMutation({
+    mutationFn: updateProduct,
+    onSuccess: (updatedProductData) => {
+      toast('Product updated successfully!', {
+        description: `${updatedProductData.name} has been edited in your inventory.`,
       });
+      queryClient.invalidateQueries({ queryKey: ['products'] });
+      queryClient.invalidateQueries({ queryKey: ['product', product.id] });
+      // Optionally navigate or further reset form
       navigate('/product');
     },
-
-    onError: (error) => {
-      toast.error('Failed to create Product');
-      console.error('Create error:', error);
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.message || 'Failed to update Product');
+      console.error('Update error:', error);
     },
   });
 
-  function onSubmit(values: ProductFormValues) {
-    createMutation.mutate(values);
+  function onSubmit(currentFormValues: ProductFormValues) {
+    const changedValues: { id: string; [key: string]: any } = {
+      id: product.id,
+    };
+    let hasChanges = false;
+
+    (Object.keys(currentFormValues) as Array<keyof ProductFormValues>).forEach(
+      (key) => {
+        const currentValue = currentFormValues[key];
+        const initialValue = initialComparableFormValues[key]; // From useState
+        let fieldIsDifferent = false;
+
+        if (key === 'product_image') {
+          if (currentValue instanceof File) {
+            fieldIsDifferent = true;
+          } else if (currentValue !== initialValue) {
+            fieldIsDifferent = true;
+          }
+        } else if (
+          key === 'price' ||
+          key === 'size_ml' ||
+          key === 'stock_quantity'
+        ) {
+          const currentNumeric =
+            currentValue === '' ||
+            currentValue === null ||
+            isNaN(Number(currentValue))
+              ? undefined
+              : Number(currentValue);
+          const initialNumeric =
+            initialValue === '' ||
+            initialValue === null ||
+            isNaN(Number(initialValue))
+              ? undefined
+              : Number(initialValue);
+          if (currentNumeric !== initialNumeric) {
+            fieldIsDifferent = true;
+          }
+        } else {
+          const currentNormalizedString =
+            currentValue === undefined || currentValue === null
+              ? ''
+              : currentValue;
+          const initialNormalizedString =
+            initialValue === undefined || initialValue === null
+              ? ''
+              : initialValue;
+          if (currentNormalizedString !== initialNormalizedString) {
+            fieldIsDifferent = true;
+          }
+        }
+
+        if (fieldIsDifferent) {
+          if (
+            key === 'price' ||
+            key === 'size_ml' ||
+            key === 'stock_quantity'
+          ) {
+            changedValues[key] =
+              currentValue === '' ||
+              currentValue === null ||
+              isNaN(Number(currentValue))
+                ? undefined // Will be omitted from FormData if strictly !== undefined
+                : Number(currentValue);
+          } else {
+            changedValues[key] = currentValue;
+          }
+          hasChanges = true;
+        }
+      }
+    );
+
+    if (!hasChanges) {
+      toast.info('No changes detected.', {
+        description: "You haven't made any changes to the product details.",
+      });
+      return;
+    }
+
+    console.log('Submitting *only changed* product data:', changedValues);
+
+    let submissionPayload: any = changedValues;
+
+    // If an image file is part of the changed data, construct FormData
+    if (changedValues.product_image instanceof File) {
+      const formData = new FormData();
+      console.log('Image is a File, using FormData for submission.');
+
+      Object.keys(changedValues).forEach((key) => {
+        const value = changedValues[key];
+
+        // FormData doesn't handle 'undefined' well, so skip appending if value is undefined.
+        // Backend should interpret missing optional fields accordingly.
+        if (value !== undefined) {
+          formData.append(key, value as string | Blob); // value can be string, number, boolean, File, Blob. Non-string/Blobs are converted to string.
+        }
+      });
+      submissionPayload = formData;
+    } else {
+      console.log(
+        'No new image file, submitting as JSON object (if product_image was string or not changed).'
+      );
+      Object.keys(submissionPayload).forEach((key) => {
+        if (submissionPayload[key] === undefined) {
+          delete submissionPayload[key]; // Or handle as per backend expectation for JSON
+        }
+      });
+    }
+    console.log(product.id, submissionPayload);
+    updateMutation.mutate({ id: product.id, product: submissionPayload });
   }
 
   return (
     <div className="max-w-8xl mx-auto p-6">
       <Card className="border-0">
         <CardHeader>
-          <CardTitle className="text-2xl font-bold">
-            Create New Product
-          </CardTitle>
+          <CardTitle className="text-2xl font-bold">Edit Product</CardTitle>
         </CardHeader>
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              {/* Basic Information */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Basic Information */}
                 <div className="space-y-4">
                   <h3 className="text-lg font-semibold">Basic Information</h3>
-
+                  {/* Name */}
                   <FormField
                     control={form.control}
                     name="name"
@@ -104,7 +251,7 @@ export default function ProductCreateForm() {
                       </FormItem>
                     )}
                   />
-
+                  {/* Description */}
                   <FormField
                     control={form.control}
                     name="description"
@@ -122,7 +269,7 @@ export default function ProductCreateForm() {
                       </FormItem>
                     )}
                   />
-
+                  {/* Brand */}
                   <FormField
                     control={form.control}
                     name="brand_id"
@@ -131,7 +278,7 @@ export default function ProductCreateForm() {
                         <FormLabel>Brand</FormLabel>
                         <Select
                           onValueChange={field.onChange}
-                          defaultValue={field.value}
+                          value={field.value || ''}
                         >
                           <FormControl>
                             <SelectTrigger>
@@ -139,7 +286,7 @@ export default function ProductCreateForm() {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            {data.brands.map(
+                            {categoryAndBrandData.brands.map(
                               (brand: { id: string; name: string }) => (
                                 <SelectItem key={brand.id} value={brand.id}>
                                   {brand.name}
@@ -152,7 +299,7 @@ export default function ProductCreateForm() {
                       </FormItem>
                     )}
                   />
-
+                  {/* Category */}
                   <FormField
                     control={form.control}
                     name="category_id"
@@ -161,7 +308,7 @@ export default function ProductCreateForm() {
                         <FormLabel>Category</FormLabel>
                         <Select
                           onValueChange={field.onChange}
-                          defaultValue={field.value}
+                          value={field.value || ''}
                         >
                           <FormControl>
                             <SelectTrigger>
@@ -169,7 +316,7 @@ export default function ProductCreateForm() {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            {data.categories.map(
+                            {categoryAndBrandData.categories.map(
                               (category: { id: string; name: string }) => (
                                 <SelectItem
                                   key={category.id}
@@ -190,8 +337,8 @@ export default function ProductCreateForm() {
                 {/* Product Details */}
                 <div className="space-y-4">
                   <h3 className="text-lg font-semibold">Product Details</h3>
-
                   <div className="grid grid-cols-2 gap-4">
+                    {/* Size (ml) */}
                     <FormField
                       control={form.control}
                       name="size_ml"
@@ -219,7 +366,7 @@ export default function ProductCreateForm() {
                         </FormItem>
                       )}
                     />
-
+                    {/* Price ($) */}
                     <FormField
                       control={form.control}
                       name="price"
@@ -249,7 +396,7 @@ export default function ProductCreateForm() {
                       )}
                     />
                   </div>
-
+                  {/* Stock Quantity */}
                   <FormField
                     control={form.control}
                     name="stock_quantity"
@@ -262,21 +409,24 @@ export default function ProductCreateForm() {
                             placeholder="0"
                             step="1"
                             {...field}
-                            onChange={(e) =>
+                            onChange={(e) => {
+                              const val = e.target.value;
                               field.onChange(
-                                e.target.value
-                                  ? Number.parseInt(e.target.value)
-                                  : undefined
-                              )
+                                val === '' ? undefined : parseInt(val, 10)
+                              );
+                            }}
+                            value={
+                              field.value !== undefined && !isNaN(field.value)
+                                ? field.value
+                                : ''
                             }
-                            value={field.value !== undefined ? field.value : ''}
                           />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
-
+                  {/* Gender Affinity */}
                   <FormField
                     control={form.control}
                     name="gender_affinity"
@@ -285,7 +435,7 @@ export default function ProductCreateForm() {
                         <FormLabel>Gender Affinity</FormLabel>
                         <Select
                           onValueChange={field.onChange}
-                          defaultValue={field.value}
+                          value={field.value || ''}
                         >
                           <FormControl>
                             <SelectTrigger>
@@ -314,6 +464,7 @@ export default function ProductCreateForm() {
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold">Fragrance Notes</h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {/* Top Notes */}
                   <FormField
                     control={form.control}
                     name="top_notes"
@@ -333,7 +484,7 @@ export default function ProductCreateForm() {
                       </FormItem>
                     )}
                   />
-
+                  {/* Middle Notes */}
                   <FormField
                     control={form.control}
                     name="middle_notes"
@@ -350,7 +501,7 @@ export default function ProductCreateForm() {
                       </FormItem>
                     )}
                   />
-
+                  {/* Base Notes */}
                   <FormField
                     control={form.control}
                     name="base_notes"
@@ -387,8 +538,8 @@ export default function ProductCreateForm() {
                       <FormControl>
                         <ImageUpload
                           className="col-span-4"
-                          value={field.value}
-                          onChange={field.onChange}
+                          value={field.value as string | undefined} // ImageUpload expects string URL or undefined for display
+                          onChange={field.onChange} // onChange will provide File or new URL string
                         />
                       </FormControl>
                       <FormMessage className="col-span-4 col-start-3" />
@@ -397,16 +548,21 @@ export default function ProductCreateForm() {
                 />
               </div>
 
+              {/* Action Buttons */}
               <div className="flex justify-end space-x-4">
-                <Button type="button" variant="outline">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => navigate('/product')} // Adjust navigation as needed
+                >
                   Cancel
                 </Button>
                 <Button
                   type="submit"
                   className="cursor-pointer"
-                  disabled={createMutation.isPending}
+                  disabled={updateMutation.isPending}
                 >
-                  {createMutation.isPending ? 'Creating...' : 'Create Product'}
+                  {updateMutation.isPending ? 'Saving...' : 'Save Changes'}
                 </Button>
               </div>
             </form>

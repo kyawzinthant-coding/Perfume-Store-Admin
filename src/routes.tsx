@@ -7,9 +7,10 @@ import {
   BrandLoader,
   CategoryandBrandLoader,
   CategoryLoader,
+  ProductDetailLoader,
   ProductLoader,
 } from './router/loader/data-loader';
-import NewProductCreate from './features/products/components/new-product-create-page';
+
 import { Error } from './components/error';
 import { Loading } from './components/loading';
 
@@ -18,6 +19,12 @@ const Login = lazy(() => import('./features/auth/Login'));
 const Categories = lazy(() => import('./features/category'));
 const Brands = lazy(() => import('./features/brands'));
 const Products = lazy(() => import('./features/products'));
+const NewProductCreate = lazy(
+  () => import('./features/products/components/new-product-create-page')
+);
+const ProductEditPage = lazy(
+  () => import('./features/products/components/product-edit-page')
+);
 
 const withSuspense = (Component: React.ComponentType) => {
   return (
@@ -52,6 +59,11 @@ export const router = createBrowserRouter([
             path: 'create',
             element: withSuspense(NewProductCreate),
             loader: CategoryandBrandLoader,
+          },
+          {
+            path: ':id/edit',
+            element: withSuspense(ProductEditPage),
+            loader: ProductDetailLoader,
           },
         ],
       },

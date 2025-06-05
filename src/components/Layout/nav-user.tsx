@@ -37,14 +37,14 @@ export function NavUser({ user }: { user: { name: string; email: string } }) {
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarImage alt={user.email} />
+                <AvatarImage alt={user.name.slice(0, 2)} />
                 <AvatarFallback className="rounded-lg">
-                  {user.name}
+                  {user.name.slice(0, 2)}
                 </AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold">{user.name}</span>
-                <span className="truncate font-normal">{user.email}</span>
+                {/* <span className="truncate font-semibold">{user.name}</span> */}
+                {/* <span className="truncate font-normal">{user.email}</span> */}
               </div>
               <ChevronsUpDown className="ml-auto size-4" />
             </SidebarMenuButton>

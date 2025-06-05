@@ -3,8 +3,10 @@ import { fetchCategoriesListQuery } from '@/api/category-query';
 import {
   fetchCategoryAndBrandQuery,
   fetchProductsListQuery,
+  OneProductQuery,
 } from '@/api/product-query';
 import { queryClient } from '@/lib/queryClient';
+import { LoaderFunctionArgs } from 'react-router';
 
 export const CategoryLoader = async () => {
   await queryClient.ensureQueryData(fetchCategoriesListQuery());
@@ -19,6 +21,16 @@ export const BrandLoader = async () => {
 export const ProductLoader = async () => {
   await queryClient.ensureQueryData(fetchProductsListQuery());
   return null;
+};
+
+export const ProductDetailLoader = async ({ params }: LoaderFunctionArgs) => {
+  console.log('param', params);
+  if (!params.id) {
+    throw new Error('Product id is required');
+  }
+  await queryClient.ensureQueryData(fetchCategoryAndBrandQuery());
+  await queryClient.ensureQueryData(OneProductQuery(params.id));
+  return { productId: params.id };
 };
 
 export const CategoryandBrandLoader = async () => {

@@ -50,6 +50,7 @@ export interface ProductCreateType {
   gender_affinity: string;
   is_active?: number;
   product_image?: File;
+  image_url?: string;
 }
 
 // Zod schema for form validation

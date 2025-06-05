@@ -11,15 +11,17 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useProduct } from '../context/product-context';
+import { useNavigate } from 'react-router';
 
-interface DataTableRowActionsProps<TData> {
+interface DataTableRowActionsProps<TData extends { id: string | number }> {
   row: Row<TData>;
 }
 
-export function DataTableRowActions<TData>({
+export function DataTableRowActions<TData extends { id: string | number }>({
   row,
 }: DataTableRowActionsProps<TData>) {
   const { setOpen, setCurrentRow } = useProduct();
+  const navigate = useNavigate();
 
   return (
     <DropdownMenu modal={false}>
@@ -35,8 +37,7 @@ export function DataTableRowActions<TData>({
       <DropdownMenuContent align="end" className="w-[160px]">
         <DropdownMenuItem
           onClick={() => {
-            setCurrentRow(row.original);
-            setOpen('edit');
+            navigate(`${row.original.id!}/edit`);
           }}
         >
           Edit

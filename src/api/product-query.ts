@@ -10,7 +10,7 @@ export const fetchProductsListQuery = () => ({
 });
 
 export const fetchProduct = async (id: string) =>
-  (await api.get(`product/${id}`)).data;
+  (await api.get(`products/${id}`)).data;
 
 export const createProduct = async (product: ProductCreateType) =>
   (
@@ -19,8 +19,17 @@ export const createProduct = async (product: ProductCreateType) =>
     })
   ).data;
 
-export const updateProduct = async (product: ProductCreateType) =>
-  (await api.post(`products/${product.id}`, product)).data;
+export const updateProduct = async ({
+  id,
+  product,
+}: {
+  id: string;
+  product: ProductCreateType;
+}) =>
+  (console.log(id, product),
+  await api.post(`products/${id}`, product, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  })).data;
 
 export const deleteProduct = async (id: string) =>
   (await api.delete(`products/${id}`)).data;
