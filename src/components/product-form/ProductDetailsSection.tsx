@@ -42,7 +42,6 @@ export function ProductDetailsSection({ control }: ProductDetailsSectionProps) {
               <FormControl>
                 <Input
                   type="number"
-                  placeholder="50"
                   {...field}
                   onChange={(e) =>
                     field.onChange(
@@ -68,8 +67,6 @@ export function ProductDetailsSection({ control }: ProductDetailsSectionProps) {
               <FormControl>
                 <Input
                   type="number"
-                  placeholder="0"
-                  step="1"
                   {...field}
                   onChange={(e) =>
                     field.onChange(
@@ -78,7 +75,7 @@ export function ProductDetailsSection({ control }: ProductDetailsSectionProps) {
                         : undefined
                     )
                   }
-                  value={field.value !== undefined ? field.value : ''}
+                  value={field.value !== undefined ? field.value : 0}
                 />
               </FormControl>
               <FormMessage />
@@ -96,17 +93,15 @@ export function ProductDetailsSection({ control }: ProductDetailsSectionProps) {
             <FormControl>
               <Input
                 type="number"
-                placeholder="0"
-                step="1"
                 {...field}
                 onChange={(e) => {
                   const val = e.target.value;
-                  field.onChange(val === '' ? undefined : parseInt(val, 10));
+                  field.onChange(val === '' ? undefined : Number.parseInt(val));
                 }}
                 value={
                   field.value !== undefined && !isNaN(field.value)
                     ? field.value
-                    : ''
+                    : 0
                 }
               />
             </FormControl>

@@ -7,6 +7,7 @@ import {
   BrandLoader,
   CategoryandBrandLoader,
   CategoryLoader,
+  DiscountLoader,
   ProductDetailLoader,
   ProductLoader,
 } from './router/loader/data-loader';
@@ -25,6 +26,7 @@ const NewProductCreate = lazy(
 const ProductEditPage = lazy(
   () => import('./features/products/components/product-edit-page')
 );
+const DiscountPage = lazy(() => import('./features/discount'));
 
 const withSuspense = (Component: React.ComponentType) => {
   return (
@@ -76,6 +78,11 @@ export const router = createBrowserRouter([
         path: '/brand',
         element: withSuspense(Brands),
         loader: BrandLoader,
+      },
+      {
+        path: '/discount',
+        element: withSuspense(DiscountPage),
+        loader: DiscountLoader,
       },
     ],
   },

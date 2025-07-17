@@ -12,6 +12,7 @@ import {
   Bell,
   Monitor,
   HelpCircle,
+  TicketPercent,
 } from 'lucide-react';
 import { SidebarData } from '../types';
 
@@ -39,6 +40,11 @@ export const sidebarData: SidebarData = {
           title: 'Brand',
           url: '/brand',
           icon: Tag,
+        },
+        {
+          title: 'Discount',
+          url: '/discount',
+          icon: TicketPercent,
         },
         {
           title: 'Order History',
