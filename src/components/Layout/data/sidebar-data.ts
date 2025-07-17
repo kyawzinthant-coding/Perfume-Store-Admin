@@ -47,8 +47,8 @@ export const sidebarData: SidebarData = {
           icon: TicketPercent,
         },
         {
-          title: 'Order History',
-          url: '/history',
+          title: 'Order List',
+          url: '/order-list',
           icon: ShoppingCart,
         },
         {
