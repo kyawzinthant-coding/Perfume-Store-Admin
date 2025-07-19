@@ -2,22 +2,19 @@ import { Header } from '@/components/Layout/Header';
 
 import { ProfileDropdown } from '@/components/profile-dropdown';
 import { Main } from '@/components/Layout/main';
-import { DataTable } from './components/data-table';
 
+import { columns } from './components/columns';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
-import columns from './components/columns';
-import { fetchOrderListQuery } from '@/api/order-query';
-import { OrderProvider } from './context/order-context';
-import { OrderDialogs } from './actions/order-dialog';
+import { DataTable } from './components/data-table';
+import { UserProvider } from './context/user-context';
+import { fetchUserQuery } from '@/api/query';
 
-const DiscountPage = () => {
-  const { data } = useSuspenseQuery(fetchOrderListQuery());
-
-  console.log('data', data);
+const UserList = () => {
+  const { data } = useSuspenseQuery(fetchUserQuery());
 
   return (
-    <OrderProvider>
+    <UserProvider>
       <Header>
         <div className="ml-auto flex items-center space-x-4">
           <ProfileDropdown />
@@ -27,12 +24,12 @@ const DiscountPage = () => {
         <div className="mb-2 space-y-4 ">
           <div className="flex justify-between items-center space-x-4">
             <div className="space-y-2">
-              <h1 className="text-2xl font-bold tracking-tight">Order List</h1>
+              <h1 className="text-2xl font-bold tracking-tight">User Lists</h1>
               <p className="text-muted-foreground">
-                Here&apos;s a list of orders
+                Here&apos;s a list of users
               </p>
             </div>
-            {/* <AddDiscount /> */}
+            {/* <AddCategory /> */}
           </div>
 
           <div>
@@ -40,10 +37,8 @@ const DiscountPage = () => {
           </div>
         </div>
       </Main>
-
-      <OrderDialogs />
-    </OrderProvider>
+    </UserProvider>
   );
 };
 
-export default DiscountPage;
+export default UserList;

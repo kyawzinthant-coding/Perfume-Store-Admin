@@ -25,14 +25,7 @@ export const OrderSchema = z.object({
   id: z.string().uuid('Invalid order ID format.'),
   user_id: z.string().uuid('Invalid user ID format.'),
   order_number: z.string().min(1, 'Order number cannot be empty.'),
-  status: z.union([
-    z.literal('Pending'),
-    z.literal('Processing'),
-    z.literal('Shipped'),
-    z.literal('Delivered'),
-    z.literal('Cancelled'),
-    z.literal('Refunded'),
-  ]),
+  status: z.string(),
   total_amount: z
     .string()
     .regex(

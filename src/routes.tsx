@@ -11,6 +11,7 @@ import {
   OrderListLoader,
   ProductDetailLoader,
   ProductLoader,
+  UserLoader,
 } from './router/loader/data-loader';
 
 import { Error } from './components/error';
@@ -31,6 +32,7 @@ const DiscountPage = lazy(() => import('./features/discount'));
 
 const OrderList = lazy(() => import('./features/order-hsitory'));
 
+const UserList = lazy(() => import('./features/user'));
 const withSuspense = (Component: React.ComponentType) => {
   return (
     <Suspense fallback={<Loading />}>
@@ -91,6 +93,11 @@ export const router = createBrowserRouter([
         path: '/order-list',
         element: withSuspense(OrderList),
         loader: OrderListLoader,
+      },
+      {
+        path: '/user-list',
+        element: withSuspense(UserList),
+        loader: UserLoader,
       },
     ],
   },

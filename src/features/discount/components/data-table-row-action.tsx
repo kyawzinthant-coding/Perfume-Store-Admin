@@ -20,7 +20,6 @@ interface DataTableRowActionsProps<TData> {
 export function DataTableRowActions<TData>({
   row,
 }: DataTableRowActionsProps<TData>) {
-  console.log(row.original);
   const discount = DiscountSchema.parse(row.original);
 
   const { setOpen, setCurrentRow } = useDiscount();

@@ -7,6 +7,7 @@ import {
   fetchProductsListQuery,
   OneProductQuery,
 } from '@/api/product-query';
+import { fetchUserQuery } from '@/api/query';
 import { queryClient } from '@/lib/queryClient';
 import { LoaderFunctionArgs } from 'react-router';
 
@@ -47,4 +48,9 @@ export const DiscountLoader = async () => {
 
 export const OrderListLoader = async () => {
   await queryClient.ensureQueryData(fetchOrderListQuery());
+};
+
+export const UserLoader = async () => {
+  await queryClient.ensureQueryData(fetchUserQuery());
+  return null;
 };

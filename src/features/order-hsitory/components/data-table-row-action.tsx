@@ -20,7 +20,7 @@ interface DataTableRowActionsProps<TData> {
 export function DataTableRowActions<TData>({
   row,
 }: DataTableRowActionsProps<TData>) {
-  console.log(row.original);
+  console.log('what is there', row.original);
   const order = OrderSchema.parse(row.original);
 
   const { setOpen, setCurrentRow } = useOrder();
