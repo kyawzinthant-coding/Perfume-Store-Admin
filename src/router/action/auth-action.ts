@@ -1,4 +1,5 @@
 import api, { authApi } from '@/api';
+import { fetchMe } from '@/api/query';
 import { queryClient } from '@/lib/queryClient';
 import { useAuthDataStore } from '@/store/useAuthStore';
 import { AxiosError } from 'axios';
@@ -12,15 +13,29 @@ export const loginAction = async ({ request }: ActionFunctionArgs) => {
   const authData = {
     email: email as string,
     password: password as string,
+    scope: 'admin',
   };
 
   try {
-    const response = await authApi.post('auth/login', authData);
+    const response = await authApi.post('auth/admin/login', authData);
 
     if (response.status !== 200) {
       return { error: response.data || 'Login Failed!' };
     }
-    await queryClient.invalidateQueries({ queryKey: ['me'] });
+
+    const res = await queryClient.ensureQueryData({
+      queryKey: ['me'],
+      queryFn: fetchMe,
+      staleTime: 1000 * 60 * 5, // 5 minutes
+      retry: 1,
+    });
+
+    if (res?.status === 'success') {
+      useAuthDataStore.getState().setUser(res.data);
+    } else {
+      useAuthDataStore.getState().setUser(null);
+    }
+
     const redirectTo = new URL(request.url).searchParams.get('redirect') || '/';
 
     return redirect(redirectTo);

@@ -9,34 +9,35 @@ export const authLoader: () => Promise<any> = async () => {
     const res = await queryClient.ensureQueryData({
       queryKey: ['me'],
       queryFn: fetchMe,
-      staleTime: 1000 * 60 * 5, // 5 minutes
-      retry: 1,
+      staleTime: 1000 * 60 * 5, // Cache for 5
     });
 
-    // res = { status: "success", data: { id, email, name, role } }
-
-    if (res?.status === 'success') {
-      useAuthDataStore.getState().setUser(res.data);
-      return res.data;
+    if (!res || res.status !== 'success') {
+      useAuthDataStore.getState().setUser(null);
+      return redirect('/login');
     }
 
-    // fallback in case something goes wrong
-    useAuthDataStore.getState().setUser(null);
-    return null;
+    if (res.status !== 'success') {
+      return redirect('/login');
+    }
+
+    if (res.data.role === 'admin') {
+      useAuthDataStore.getState().setUser(res.data);
+    }
   } catch {
-    sessionStorage.removeItem('accessToken');
     useAuthDataStore.getState().setUser(null);
-    return null;
+    // return redirect('/login');
   }
 };
 
 export const loginLoader = async () => {
   try {
-    const res = await authApi.get('auth/me');
+    const res = await authApi.get('admin/me');
 
     if (res.status !== 200) {
       return null;
     }
+
     return redirect('/');
   } catch (error) {
     return null;

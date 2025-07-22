@@ -1,8 +1,9 @@
-import { Outlet } from 'react-router';
+import { Outlet, redirect } from 'react-router';
 import { useEffect } from 'react';
 
 import { useAuthDataStore } from '@/store/useAuthStore';
 import { useQuery } from '@tanstack/react-query';
+
 import Cookies from 'js-cookie';
 
 import { useLocation } from 'react-router';
@@ -15,27 +16,27 @@ import ProgressBar from '@/lib/ProgressBar';
 import { fetchMe } from '@/api/query';
 
 function RootLayout() {
-  const userInStore = useAuthDataStore((state) => state.user);
+  // const userInStore = useAuthDataStore((state) => state.user);
 
-  const { data: user } = useQuery({
-    queryKey: ['me'],
-    queryFn: fetchMe,
-    staleTime: 1000 * 60 * 5, // Cache for 5 minutes
-    retry: false, // Don't retry if failed
-    enabled: !userInStore?.email,
-  });
+  // console.log('user info', userInStore);
 
-  const value = 5;
+  // const { data: user } = useQuery({
+  //   queryKey: ['me'],
+  //   queryFn: fetchMe,
+  //   enabled: !userInStore?.email,
+  // });
 
-  if (value <= 5) {
-    console.log(
-      'User data is not available yet, waiting for query to resolve...'
-    );
-  }
+  // const value = 5;
 
-  useEffect(() => {
-    useAuthDataStore.getState().setUser(user.data || null);
-  }, [user]);
+  // if (value <= 5) {
+  //   console.log(
+  //     'User data is not available yet, waiting for query to resolve...'
+  //   );
+  // }
+
+  // useEffect(() => {
+  //   useAuthDataStore.getState().setUser(user.data || null);
+  // }, [user]);
 
   const { pathname } = useLocation();
 

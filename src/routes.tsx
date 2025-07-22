@@ -105,7 +105,6 @@ export const router = createBrowserRouter([
     path: '/login',
     element: <Login />, // Login is not lazy-loaded as it's usually needed immediately
     action: loginAction,
-    loader: loginLoader,
   },
   {
     path: '/logout',
